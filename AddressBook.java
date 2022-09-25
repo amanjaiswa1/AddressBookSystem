@@ -67,10 +67,10 @@ public class AddressBook {
 
 	private static void showMenu() {
 		System.out.println("\n: Please Select The Option : ");
-		System.out.println("1. Show Contacts.");
-		System.out.println("2. Add New Contact.");
-		System.out.println("3. Edit Contact.");
-		System.out.println("4. Delete Contact.");
+		System.out.println("1. Show All Contacts.");
+		System.out.println("2. Add A New Contact.");
+		System.out.println("3. Edit A Contact.");
+		System.out.println("4. Delete A Contact.");
 		System.out.println("5. Exit");
 		int selection = sc.nextInt();
 		switch (selection) {
@@ -100,7 +100,7 @@ public class AddressBook {
 	}
 
 	private static void addContact() {
-		System.out.println("\n: Add new Contact :");
+		System.out.println("\n: Add A New Contact :");
 		System.out.print("Enter First Name : ");
 		firstName = sc.next();
 		System.out.print("Enter Last Name : ");
