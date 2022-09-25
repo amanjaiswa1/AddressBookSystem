@@ -1,6 +1,6 @@
 package com.assignments.day9.AddressBookSystem;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -70,7 +70,8 @@ public class AddressBook {
 		System.out.println("1. Show Contacts.");
 		System.out.println("2. Add New Contact.");
 		System.out.println("3. Edit Contact.");
-		System.out.println("4. Exit");
+		System.out.println("4. Delete Contact.");
+		System.out.println("5. Exit");
 		int selection = sc.nextInt();
 		switch (selection) {
 		case 1:
@@ -80,6 +81,8 @@ public class AddressBook {
 		case 3:
 			updateContact();
 		case 4:
+			deleteContact();
+		case 5:
 			System.exit(0);
 		default:
 			showMenu();
@@ -121,7 +124,7 @@ public class AddressBook {
 	}
 
 	private static void updateContact() {
-		System.out.println("\nEnter the Name of the Person to update the contact details: ");
+		System.out.println("\nEnter the Name of the Person to Update the contact details: ");
 		String name = sc.next();
 		for (Contacts contacts : contactsList) {
 			if (contacts.firstName.equals(name)) {
@@ -151,5 +154,17 @@ public class AddressBook {
 			}
 		}
 		showMenu();
+	}
+
+	private static void deleteContact() {
+		System.out.println("Enter the Name to Delete the contact details: ");
+		String name = sc.next();
+		for (Contacts contacts : contactsList) {
+			if (contacts.firstName.equals(name)) {
+				contactsList.remove(contacts);
+				System.out.println("Deleted from the Address Book.");
+				showMenu();
+			}
+		}
 	}
 }
