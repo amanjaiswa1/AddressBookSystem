@@ -18,6 +18,7 @@ class Contacts {
 		this.zipCode = zipCode;
 	}
 
+	// Setter for user inputs.
 	public void setFirstname(String firstName) {
 		this.firstName = firstName;
 	}
@@ -46,6 +47,7 @@ class Contacts {
 		this.zipCode = zipCode;
 	}
 
+	// Displays the contacts of address book.
 	@Override
 	public String toString() {
 		return "First Name : '" + firstName + "', Last Name : '" + lastName + "', Phone Number : '" + phoneNumber
@@ -65,6 +67,7 @@ public class AddressBook {
 		showMenu();
 	}
 
+	// Menu to perform relevant tasks.
 	private static void showMenu() {
 		System.out.println("\n: Please Select The Option : ");
 		System.out.println("1. Show All Contacts.");
@@ -89,6 +92,7 @@ public class AddressBook {
 		}
 	}
 
+	// Shows the stored contacts in address book.
 	private static void showContact() {
 		System.out.println("\n: Contacts :");
 		int count = 1;
@@ -99,6 +103,7 @@ public class AddressBook {
 		showMenu();
 	}
 
+	// Adds contact in address book.
 	private static void addContact() {
 		System.out.println("\n: Add A New Contact :");
 		System.out.print("Enter First Name : ");
@@ -116,13 +121,22 @@ public class AddressBook {
 		System.out.print("Enter Zip : ");
 		zipCode = sc.next();
 
-		Contacts contacts = new Contacts(firstName, lastName, phoneNumber, email, city, state, zipCode);
-		contactsList.add(contacts);
-		System.out.println("\n: Contact Added to the Address Book :");
-		System.out.println(contacts);
+		boolean existing = false;
+		for (Contacts contacts : contactsList) {
+			existing = contacts.firstName.equals(firstName) && contacts.lastName.equals(lastName);
+		}
+		if (!existing) {
+			Contacts contacts = new Contacts(firstName, lastName, phoneNumber, email, city, state, zipCode);
+			contactsList.add(contacts);
+			System.out.println("\n: Contact Added to the Address Book :");
+			System.out.println(contacts);
+		} else {
+			System.out.println("\n: This Name already exists in the Address Book :");
+		}
 		showMenu();
 	}
 
+	// Edits the existing contacts in address book by name of the person.
 	private static void updateContact() {
 		System.out.println("\nEnter the Name of the Person to Update the contact details: ");
 		String name = sc.next();
@@ -156,6 +170,7 @@ public class AddressBook {
 		showMenu();
 	}
 
+	// Delete any existing contact from address book ny person name.
 	private static void deleteContact() {
 		System.out.println("Enter the Name to Delete the contact details: ");
 		String name = sc.next();
