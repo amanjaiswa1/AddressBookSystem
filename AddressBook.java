@@ -1,10 +1,11 @@
 package com.assignments.day9.AddressBookSystem;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddressBook {
 	static Scanner scanner = new Scanner(System.in);
-	HashMap<String, LinkedList<Contacts>> contactBook = new HashMap<>();
+	Map<String, List<Contacts>> contactBook = new HashMap<>();
 
 	// Main Method
 	public static void main(String[] args) {
@@ -20,8 +21,8 @@ public class AddressBook {
 		try {
 			while (true) {
 				System.out.println("\n" + "1. Create New Address Book \n" + "2. Continue with existing Address Book \n"
-						+ "3. Show All Address Books \n" + "4. Search person by location in all Address Books\n"
-						+ "5. Search Phone Number by Name \n" + "6. EXIT");
+						+ "3. Show All Address Books \n" + "4. Search Contacts by Location \n"
+						+ "5. Search Phone Number by Name \n" + "6. Sort Contacts \n" + "7. EXIT");
 				int choice = scanner.nextInt();
 
 				switch (choice) {
@@ -29,7 +30,7 @@ public class AddressBook {
 				case 1:
 					System.out.println("\n: Enter a name for Address Book :");
 					String newBook = scanner.next();
-					LinkedList<Contacts> contactList = new LinkedList<>();
+					List<Contacts> contactList = new LinkedList<>();
 
 					if (contactBook.containsKey(newBook))
 						System.out.println("\n: Book already exists :");
@@ -74,6 +75,11 @@ public class AddressBook {
 					getContactNumber(nameForContact);
 					break;
 
+				// Sorting The Contacts By Name.
+				case 6:
+					sortContacts();
+					break;
+
 				// Terminates The Menu.
 				default:
 					System.exit(0);
@@ -85,7 +91,7 @@ public class AddressBook {
 	}
 
 	// createContact(AddressBook) Method
-	private void createContact(LinkedList<Contacts> contactList, HashMap<String, LinkedList<Contacts>> contactBook,
+	private void createContact(List<Contacts> contactList, Map<String, List<Contacts>> contactBook,
 			String addressBook) {
 		try {
 			boolean run = true;
@@ -98,7 +104,7 @@ public class AddressBook {
 
 				// Adds A New Contact In Address Book.
 				case 1: {
-					LinkedList<Contacts> multiContactInBook = addContact(contactList);
+					List<Contacts> multiContactInBook = addContact(contactList);
 					contactBook.put(addressBook, multiContactInBook);
 				}
 					break;
@@ -129,7 +135,7 @@ public class AddressBook {
 	}
 
 	// addContacts Method
-	private LinkedList<Contacts> addContact(LinkedList<Contacts> contactList) {
+	private List<Contacts> addContact(List<Contacts> contactList) {
 		try {
 			System.out.println("Enter the details \n" + "First Name :");
 			String firstName = scanner.next();
@@ -172,7 +178,7 @@ public class AddressBook {
 	}
 
 	// displayContact Method
-	private void displayContact(LinkedList<Contacts> contactList) {
+	private void displayContact(List<Contacts> contactList) {
 		try {
 			System.out.println("All Contacts ::" + contactList.size());
 			System.out.println(contactList);
@@ -182,7 +188,7 @@ public class AddressBook {
 	}
 
 	// updateContacts Method
-	private void updateContact(LinkedList<Contacts> contactList) {
+	private void updateContact(List<Contacts> contactList) {
 		try {
 			System.out.println("Enter the name of the person you want to update the contact of");
 			String searchName = scanner.next();
@@ -204,49 +210,49 @@ public class AddressBook {
 					contactInfo.setFirstName(newFirstName);
 				}
 					break;
-					
+
 				case 2: {
 					System.out.println("Enter new Last Name");
 					String newLastName = scanner.next();
 					contactInfo.setLastName(newLastName);
 				}
 					break;
-					
+
 				case 3: {
 					System.out.println("Enter new Phone Number");
 					String newPhone = scanner.next();
 					contactInfo.setPhoneNumber(newPhone);
 				}
 					break;
-					
+
 				case 4: {
 					System.out.println("Enter new Email");
 					String newEmail = scanner.next();
 					contactInfo.setEmail(newEmail);
 				}
 					break;
-					
+
 				case 5: {
 					System.out.println("Enter new City");
 					String newCity = scanner.next();
 					contactInfo.setCity(newCity);
 				}
 					break;
-					
+
 				case 6: {
 					System.out.println("Enter new State");
 					String newState = scanner.next();
 					contactInfo.setState(newState);
 				}
 					break;
-					
+
 				case 7: {
 					System.out.println("Enter new Zip code");
 					String newZipcode = scanner.next();
 					contactInfo.setZipCode(newZipcode);
 				}
 					break;
-					
+
 				}
 				System.out.println("\n: Updated Successfully :");
 			}
@@ -256,7 +262,7 @@ public class AddressBook {
 	}
 
 	// deleteContact Method
-	private void deleteContact(LinkedList<Contacts> contactList) {
+	private void deleteContact(List<Contacts> contactList) {
 		try {
 			System.out.println("Enter the person name you want to delete the contact details of");
 			String searchName = scanner.next();
@@ -318,8 +324,15 @@ public class AddressBook {
 		}
 	}
 
+	// sortConctacts Method (sorts by name)
+	private void sortContacts() {
+		System.out.println("\n: Sorted Contacts By Name :");
+		contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
+				.sorted(Comparator.comparing(Contacts::getFirstName)).forEach(System.out::println));
+	}
+
 	// searchName Method
-	private int searchName(String searchName, LinkedList<Contacts> contactList) {
+	private int searchName(String searchName, List<Contacts> contactList) {
 		try {
 			for (int index = 0; index < contactList.size(); index++) {
 				if (contactList.get(index).getFirstName().equals(searchName))
