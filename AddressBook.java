@@ -249,7 +249,6 @@ public class AddressBook {
 			Hashtable<String, List<String>> searchResult = new Hashtable<>();
 			List<String> contactList=new ArrayList<>();;
 			for (String keyOfBook : contactBook.keySet()) {
-				//contactList = new ArrayList<>();
 				for (int index = 0; index < contactBook.get(keyOfBook).size(); index++) {
 
 					if (contactBook.get(keyOfBook).get(index).getCity().equals(nameForLocation))
@@ -261,7 +260,7 @@ public class AddressBook {
 				if (!contactList.isEmpty())
 					searchResult.put(keyOfBook, contactList);
 			}
-			System.out.println("Persons In City or State ->"+contactList);
+			System.out.println("Persons In City or State ->"+searchResult);
 			return searchResult;
 		} catch (Exception e) {
 			System.out.println(e);
