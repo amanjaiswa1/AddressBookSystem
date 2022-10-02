@@ -1,185 +1,285 @@
 package com.assignments.day9.AddressBookSystem;
 
 import java.util.*;
-import java.util.List;
-import java.util.Scanner;
-
-class Contacts {
-	String firstName, lastName, city, state, email, phoneNumber, zipCode;
-
-	public Contacts(String firstName, String lastName, String phoneNumber, String email, String city, String state,
-			String zipCode) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.city = city;
-		this.state = state;
-		this.zipCode = zipCode;
-	}
-
-	// Setter for user inputs.
-	public void setFirstname(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public void setLastname(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public void setPhone(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public void setZipcode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	// Displays the contacts of address book.
-	@Override
-	public String toString() {
-		return "First Name : '" + firstName + "', Last Name : '" + lastName + "', Phone Number : '" + phoneNumber
-				+ "', email ID : '" + email + "', City : '" + city + "', State : '" + state + "', Zipcode : '" + zipCode
-				+ "'";
-	}
-}
 
 public class AddressBook {
-	static Scanner sc = new Scanner(System.in);
-	static List<Contacts> contactsList;
-	private static String firstName, lastName, city, state, email, phoneNumber, zipCode;
+	static Scanner scanner = new Scanner(System.in);
+	HashMap<String, LinkedList<Contacts>> contactBook = new HashMap<>();
 
+	// Main Method
 	public static void main(String[] args) {
+
 		System.out.println(":: Welcome to Address Book Program ::");
-		contactsList = new ArrayList<>();
-		showMenu();
+		AddressBook addressBook = new AddressBook();
+		addressBook.showMenu();
 	}
 
-	// Menu to perform relevant tasks.
-	private static void showMenu() {
-		System.out.println("\n: Please Select The Option : ");
-		System.out.println("1. Show All Contacts.");
-		System.out.println("2. Add A New Contact.");
-		System.out.println("3. Edit A Contact.");
-		System.out.println("4. Delete A Contact.");
-		System.out.println("5. Exit");
-		int selection = sc.nextInt();
-		switch (selection) {
-		case 1:
-			showContact();
-		case 2:
-			addContact();
-		case 3:
-			updateContact();
-		case 4:
-			deleteContact();
-		case 5:
-			System.exit(0);
-		default:
-			showMenu();
-		}
-	}
+	// Menu Method to show the different operation which can be performed in address
+	// book.
+	public void showMenu() {
+		try {
+			while (true) {
+				System.out.println("" + "1. Create New Address Book \n" + "2. Continue with existing Address Book \n"
+						+ "3. Show All Address Books \n" + "4. Search person by location in all Address Books\n"
+						+ "5. Exit");
+				int choice = scanner.nextInt();
 
-	// Shows the stored contacts in address book.
-	private static void showContact() {
-		System.out.println("\n: Contacts :");
-		int count = 1;
-		for (Contacts contacts : contactsList) {
-			System.out.println("Contact Number " + count + ": " + contacts + "\n");
-			count++;
-		}
-		showMenu();
-	}
+				switch (choice) {
+				case 1:
+					System.out.println("\n: Enter a name for Address Book :");
+					String newBook = scanner.next();
+					LinkedList<Contacts> contactList = new LinkedList<>();
 
-	// Adds contact in address book.
-	private static void addContact() {
-		System.out.println("\n: Add A New Contact :");
-		System.out.print("Enter First Name : ");
-		firstName = sc.next();
-		System.out.print("Enter Last Name : ");
-		lastName = sc.next();
-		System.out.print("Enter Phone : ");
-		phoneNumber = sc.next();
-		System.out.print("Enter Email : ");
-		email = sc.next();
-		System.out.print("Enter City : ");
-		city = sc.next();
-		System.out.print("Enter State : ");
-		state = sc.next();
-		System.out.print("Enter Zip : ");
-		zipCode = sc.next();
+					if (contactBook.containsKey(newBook))
+						System.out.println("\n: Book already exists :");
+					else
+						createContact(contactList, contactBook, newBook);
+					break;
 
-		boolean existing = false;
-		for (Contacts contacts : contactsList) {
-			existing = contacts.firstName.equals(firstName) && contacts.lastName.equals(lastName);
-		}
-		if (!existing) {
-			Contacts contacts = new Contacts(firstName, lastName, phoneNumber, email, city, state, zipCode);
-			contactsList.add(contacts);
-			System.out.println("\n: Contact Added to the Address Book :");
-			System.out.println(contacts);
-		} else {
-			System.out.println("\n: This Name already exists in the Address Book :");
-		}
-		showMenu();
-	}
+				case 2:
+					System.out.println(contactBook.keySet());
+					System.out.println("Which address book do you want to access?");
+					String existingBook = scanner.next();
 
-	// Edits the existing contacts in address book by name of the person.
-	private static void updateContact() {
-		System.out.println("\nEnter the Name of the Person to Update the contact details: ");
-		String name = sc.next();
-		for (Contacts contacts : contactsList) {
-			if (contacts.firstName.equals(name)) {
-				System.out.println("\n: Add new Contact :\n");
-				System.out.print("Enter First Name : ");
-				firstName = sc.next();
-				System.out.print("Enter Last Name : ");
-				lastName = sc.next();
-				System.out.print("Enter Phone : ");
-				phoneNumber = sc.next();
-				System.out.print("Enter Email : ");
-				email = sc.next();
-				System.out.print("Enter City : ");
-				city = sc.next();
-				System.out.print("Enter State : ");
-				state = sc.next();
-				System.out.print("Enter Zip : ");
-				zipCode = sc.next();
-				contacts.setFirstname(firstName);
-				contacts.setLastname(lastName);
-				contacts.setPhone(phoneNumber);
-				contacts.setEmail(email);
-				contacts.setCity(city);
-				contacts.setState(state);
-				contacts.setZipcode(zipCode);
-				System.out.println("\n: Contact Updated :\n");
+					if (contactBook.containsKey(existingBook)) {
+						contactList = contactBook.get(existingBook);
+						createContact(contactList, contactBook, existingBook);
+					} else
+						System.out.println("\n: Book Not Found :");
+					break;
+
+				case 3:
+					int serialNo = 1;
+					for (String book : contactBook.keySet()) {
+						System.out.println(serialNo + ". " + book);
+						serialNo++;
+					}
+					System.out.println("\n" + contactBook);
+					break;
+
+				case 4:
+					System.out.println("Enter Name of City or State");
+					String nameForLocation = scanner.next();
+					searchByLocation(nameForLocation);
+					break;
+
+				default:
+					System.exit(0);
+				}
 			}
+		} catch (Exception e) {
+			System.out.println(e);
 		}
-		showMenu();
 	}
 
-	// Delete any existing contact from address book ny person name.
-	private static void deleteContact() {
-		System.out.println("Enter the Name to Delete the contact details: ");
-		String name = sc.next();
-		for (Contacts contacts : contactsList) {
-			if (contacts.firstName.equals(name)) {
-				contactsList.remove(contacts);
-				System.out.println("Deleted from the Address Book.");
-				showMenu();
+	// createContact Method
+	private void createContact(LinkedList<Contacts> contactList, HashMap<String, LinkedList<Contacts>> contactBook,
+			String addressBook) {
+		try {
+			boolean run = true;
+			while (run) {
+				System.out.println("" + "1. Add a New Contact Detail \n" + "2. Show All Contacts \n"
+						+ "3. Update a Contact \n" + "4. Delete a Contact \n" + "5. Exit");
+				int choice = scanner.nextInt();
+
+				switch (choice) {
+				case 1: {
+					LinkedList<Contacts> multiContactInBook = addContact(contactList);
+					contactBook.put(addressBook, multiContactInBook);
+				}
+					break;
+				case 2:
+					displayContact(contactList);
+					break;
+				case 3:
+					updateContact(contactList);
+					break;
+				case 4:
+					deleteContact(contactList);
+					break;
+				default:
+					run = false;
+				}
 			}
+		} catch (InputMismatchException e) {
+			System.out.println(e);
 		}
 	}
+
+	// addContacts Method
+	private LinkedList<Contacts> addContact(LinkedList<Contacts> contactList) {
+		try {
+			System.out.println("Enter the details \n" + "First Name :");
+			String firstName = scanner.next();
+			int existingName = searchName(firstName, contactList);
+			if (existingName == -1) {
+				Contacts contactInfo = new Contacts();
+				contactInfo.setFirstName(firstName);
+
+				System.out.println("Last Name :");
+				String lastName = scanner.next();
+				contactInfo.setLastName(lastName);
+
+				System.out.println("Phone Number :");
+				String phoneNumber = scanner.next();
+				contactInfo.setPhoneNumber(phoneNumber);
+
+				System.out.println("Email :");
+				String email = scanner.next();
+				contactInfo.setEmail(email);
+
+				System.out.println("City :");
+				String city = scanner.next();
+				contactInfo.setCity(city);
+
+				System.out.println("State :");
+				String state = scanner.next();
+				contactInfo.setState(state);
+
+				System.out.println("Zip Code :");
+				String zipCode = scanner.next();
+				contactInfo.setZipCode(zipCode);
+
+				contactList.add(contactInfo);
+			} else
+				System.out.println("\n: Name Already Exists :");
+		} catch (InputMismatchException e) {
+			System.out.println("\n: Please Provide Correct Information :");
+		}
+		return contactList;
+	}
+
+	// displayContact Method
+	private void displayContact(LinkedList<Contacts> contactList) {
+		try {
+			System.out.println("All Contacts ::" + contactList.size());
+			System.out.println(contactList);
+		} catch (Exception e) {
+			System.out.println("\n: List Is Empty :");
+		}
+	}
+
+	// updateContacts Method
+	private void updateContact(LinkedList<Contacts> contactList) {
+		try {
+			System.out.println("Enter the name of the person you want to update the contact of");
+			String searchName = scanner.next();
+			int editName = searchName(searchName, contactList);
+
+			if (editName == -1)
+				System.out.println("\n: Name Not Found :");
+			else {
+				Contacts contactInfo = contactList.get(editName);
+				System.out.println(contactInfo);
+
+				System.out.println("\n: What do you want to update :\n" + "1. First Name \n" + "2. Last Name \n"
+						+ "3. Phone Number \n" + "4. Email \n" + "5. City \n" + "6. State \n" + "7. Zip code \n");
+				int choice = scanner.nextInt();
+				switch (choice) {
+				case 1: {
+					System.out.println("Enter new First Name");
+					String newFirstName = scanner.next();
+					contactInfo.setFirstName(newFirstName);
+				}
+					break;
+				case 2: {
+					System.out.println("Enter new Last Name");
+					String newLastName = scanner.next();
+					contactInfo.setLastName(newLastName);
+				}
+					break;
+				case 3: {
+					System.out.println("Enter new Phone Number");
+					String newPhone = scanner.next();
+					contactInfo.setPhoneNumber(newPhone);
+				}
+					break;
+				case 4: {
+					System.out.println("Enter new Email");
+					String newEmail = scanner.next();
+					contactInfo.setEmail(newEmail);
+				}
+					break;
+				case 5: {
+					System.out.println("Enter new City");
+					String newCity = scanner.next();
+					contactInfo.setCity(newCity);
+				}
+					break;
+				case 6: {
+					System.out.println("Enter new State");
+					String newState = scanner.next();
+					contactInfo.setState(newState);
+				}
+					break;
+				case 7: {
+					System.out.println("Enter new Zip code");
+					String newZipcode = scanner.next();
+					contactInfo.setZipCode(newZipcode);
+				}
+					break;
+				}
+				System.out.println("\n: Updated Successfully :");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	// deleteContact Method
+	private void deleteContact(LinkedList<Contacts> contactList) {
+		try {
+			System.out.println("Enter the person name you want to delete the contact details of");
+			String searchName = scanner.next();
+			int deleteName = searchName(searchName, contactList);
+
+			if (deleteName == -1)
+				System.out.println("\n: Name Not Found :");
+			else {
+				contactList.remove(deleteName);
+				System.out.println("\n: Deleted Successfully :");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	// searchByLocation Method
+	public Hashtable<String, List<String>> searchByLocation(String nameForLocation) {
+		try {
+			Hashtable<String, List<String>> searchResult = new Hashtable<>();
+			List<String> contactList;
+			for (String keyOfBook : contactBook.keySet()) {
+				contactList = new ArrayList<>();
+				for (int index = 0; index < contactBook.get(keyOfBook).size(); index++) {
+
+					if (contactBook.get(keyOfBook).get(index).getCity().equals(nameForLocation))
+						contactList.add(contactBook.get(keyOfBook).get(index).getFirstName());
+
+					if (contactBook.get(keyOfBook).get(index).getState().equals(nameForLocation))
+						contactList.add(contactBook.get(keyOfBook).get(index).getFirstName());
+				}
+				if (!contactList.isEmpty())
+					searchResult.put(keyOfBook, contactList);
+			}
+			return searchResult;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
+	// searchName Method
+	private int searchName(String searchName, LinkedList<Contacts> contactList) {
+		try {
+			for (int index = 0; index < contactList.size(); index++) {
+				if (contactList.get(index).getFirstName().equals(searchName))
+					return index;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return -1;
+	}
+
 }
