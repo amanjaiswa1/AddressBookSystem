@@ -80,6 +80,6 @@ public class Contacts {
 	public String toString() {
 		return "First Name : '" + firstName + "', Last Name : '" + lastName + "', Phone Number : '" + phoneNumber
 				+ "', email ID : '" + email + "', City : '" + city + "', State : '" + state + "', Zipcode : '" + zipCode
-				+ "'";
+				+ "'"+"\n";
 	}
 }

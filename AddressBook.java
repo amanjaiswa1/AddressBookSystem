@@ -14,8 +14,7 @@ public class AddressBook {
 		addressBook.showMenu();
 	}
 
-	// Menu Method to show the different operation which can be performed in address
-	// book.
+	// Menu Method to show the different operation which can be performed in address book.
 	public void showMenu() {
 		try {
 			while (true) {
@@ -58,7 +57,7 @@ public class AddressBook {
 					break;
 
 				case 4:
-					System.out.println("Enter Name of City or State");
+					System.out.println("\n: Enter Name of City or State :");
 					String nameForLocation = scanner.next();
 					searchByLocation(nameForLocation);
 					break;
@@ -244,24 +243,25 @@ public class AddressBook {
 		}
 	}
 
-	// searchByLocation Method
+	// searchByLocation Method (Search person by city or state)
 	public Hashtable<String, List<String>> searchByLocation(String nameForLocation) {
 		try {
 			Hashtable<String, List<String>> searchResult = new Hashtable<>();
-			List<String> contactList;
+			List<String> contactList=new ArrayList<>();;
 			for (String keyOfBook : contactBook.keySet()) {
-				contactList = new ArrayList<>();
+				//contactList = new ArrayList<>();
 				for (int index = 0; index < contactBook.get(keyOfBook).size(); index++) {
 
 					if (contactBook.get(keyOfBook).get(index).getCity().equals(nameForLocation))
 						contactList.add(contactBook.get(keyOfBook).get(index).getFirstName());
-
+					
 					if (contactBook.get(keyOfBook).get(index).getState().equals(nameForLocation))
 						contactList.add(contactBook.get(keyOfBook).get(index).getFirstName());
 				}
 				if (!contactList.isEmpty())
 					searchResult.put(keyOfBook, contactList);
 			}
+			System.out.println("Persons In City or State ->"+contactList);
 			return searchResult;
 		} catch (Exception e) {
 			System.out.println(e);
