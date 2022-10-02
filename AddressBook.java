@@ -1,7 +1,6 @@
 package com.assignments.day9.AddressBookSystem;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AddressBook {
 	static Scanner scanner = new Scanner(System.in);
@@ -75,7 +74,7 @@ public class AddressBook {
 					getContactNumber(nameForContact);
 					break;
 
-				// Sorting The Contacts By Name.
+				// Sorting The Contacts By City, State, ZipCode & Name.
 				case 6:
 					sortContacts();
 					break;
@@ -324,11 +323,42 @@ public class AddressBook {
 		}
 	}
 
-	// sortConctacts Method (sorts by name)
+	// sortContacts Method (sorts by city,state,zipcode,name)
 	private void sortContacts() {
-		System.out.println("\n: Sorted Contacts By Name :");
-		contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
-				.sorted(Comparator.comparing(Contacts::getFirstName)).forEach(System.out::println));
+		boolean run = true;
+		while (run) {
+			System.out.println("\nSort Contacts By :\n" + "1. City \n" + "2. State \n" + "3. Zipcode \n" + "4. Name \n"
+					+ "5. EXIT");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				System.out.println("\n: Sorted Contacts By City :");
+				contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
+						.sorted(Comparator.comparing(Contacts::getCity)).forEach(System.out::println));
+				break;
+
+			case 2:
+				System.out.println("\n: Sorted Contacts By State :");
+				contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
+						.sorted(Comparator.comparing(Contacts::getState)).forEach(System.out::println));
+				break;
+
+			case 3:
+				System.out.println("\n: Sorted Contacts By ZipCode :");
+				contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
+						.sorted(Comparator.comparing(Contacts::getZipCode)).forEach(System.out::println));
+				break;
+
+			case 4:
+				System.out.println("\n: Sorted Contacts By Name :");
+				contactBook.keySet().forEach(keyOfBook -> contactBook.get(keyOfBook).stream()
+						.sorted(Comparator.comparing(Contacts::getFirstName)).forEach(System.out::println));
+				break;
+
+			default:
+				run = false;
+			}
+		}
 	}
 
 	// searchName Method
@@ -343,5 +373,4 @@ public class AddressBook {
 		}
 		return -1;
 	}
-
 }
