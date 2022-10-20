@@ -4,7 +4,8 @@ import java.util.*;
 
 public class AddressBook {
 	static Scanner scanner = new Scanner(System.in);
-	Map<String, List<Contacts>> contactBook = new HashMap<>();
+	static Map<String, List<Contacts>> contactBook = new HashMap<>();
+	AddressBookIOService addressBookIOService = new AddressBookIOService();
 
 	// Main Method
 	public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class AddressBook {
 						System.out.println("\n: Book already exists :");
 					else
 						createContact(contactList, contactBook, newBook);
+					addressBookIOService.writeContactDetails(contactBook); // Writing Contact Details In A Text File
 					break;
 
 				// Address Book Choice.
@@ -128,6 +130,7 @@ public class AddressBook {
 					run = false;
 				}
 			}
+			addressBookIOService.writeContactDetails(contactBook); // Writing Contact Details In A Text File
 		} catch (InputMismatchException e) {
 			System.out.println(e);
 		}
